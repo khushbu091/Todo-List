@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import { addTask } from './TodoSlice';
+import { addTask, recComplete, recDel } from './TodoSlice';
 const App=()=>{
   const ans=useSelector((state)=>state.todo.task);
   const dispatch=useDispatch("");
@@ -11,17 +11,24 @@ const App=()=>{
   const workAdd=()=>{
     dispatch(addTask(input))
   }
+  const myDel=(id)=>
+  {
+    dispatch(recDel(id))
+  }
+  const taskComplete=(id)=>{
+    dispatch(recComplete(id));
+  }
   const myans=ans.map((key)=>{
     sn++;
     return(
       <tr>
         <td>[{sn}].</td>
-        <td>{key.work}</td>
+        <td>{key.status? <span> {key.work} </span> : <span style={{color:"red", textDecoration:"line-through"}}></span>}</td>
         <td>
-          <button onClick={()=>{mydel}}>Delete</button>
+          <button onClick={()=>{myDel(key.id)}}>Delete</button>
         </td>
         <td>
-          <button>complete</button>
+          <button onClick={()=>{taskComplete(key.id)}}>complete</button>
         </td>
         <td> 
           <button>reopen
@@ -38,9 +45,9 @@ const App=()=>{
     Enter your task: <input type="taxt" value={input} onChange={(e)=>{setInput(e.target.value)}}/>
     <button onClick={workAdd}> Add Task </button>
     <hr/>
-    <table>
+    <table border="1">
       <tr>
-        <td>slot</td>
+        <td>sno</td>
         <td>work additing</td>
         <th></th>
         <th></th>
